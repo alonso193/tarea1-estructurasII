@@ -8,12 +8,14 @@ using namespace std;
 
 class Cache{
 private:
+    //diferentes variables necesarias hasta el momento para hacer la descripción de la cache
     int tamano_cache;
     int tamano_bloque;
     int asociatividad;
     int tamano_de_direccion = 32;
     int numero_de_bloques;
     int numero_de_sets;
+    //estas dos son dobles porque la función log2 devuelve un doble, por lo tanto tiene que ser guardado en un double
     double byte_offset;
     double index;
     int **cache;
