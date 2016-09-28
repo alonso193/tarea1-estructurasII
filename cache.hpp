@@ -3,6 +3,8 @@
 #endif
 #include <iostream>
 #include <math.h>
+#include <string.h>
+
 using namespace std;
 
 
@@ -16,11 +18,12 @@ private:
     int numero_de_bloques;
     int numero_de_sets;
     //estas dos son dobles porque la función log2 devuelve un doble, por lo tanto tiene que ser guardado en un double
-    double byte_offset;
-    double index;
+    int byte_offset;//double
+    int tag;
+	int index;//double
     int **cache;
-    int direccion[];
-    int tag[];
+	int fin_index;
+    int tamano_tag;
 public:
     //constructor
     Cache(int asociatividad, int tamano_cache, int tamano_bloque){
@@ -38,26 +41,28 @@ public:
 
 //se encarga de calcular los parámetros del cache con base en los parámetros ingresados
 void Cache::setCache(){
-    std::cout << "asociatividad: "<< asociatividad << std::endl;
-    std::cout << "tamano_cache: "<<tamano_cache << std::endl;
-    std::cout << "tamano_bloque: "<<tamano_bloque << std::endl;
+    cout << "asociatividad: "<< asociatividad << std::endl;
+    cout << "tamano_cache: "<<tamano_cache << std::endl;
+    cout << "tamano_bloque: "<<tamano_bloque << std::endl;
     numero_de_bloques = (tamano_cache)/(tamano_bloque);
     numero_de_sets = (numero_de_bloques)/(asociatividad);
     byte_offset = log2(tamano_bloque);
-    index = log2(numero_de_sets);
-    std::cout << "byte_offset: "<< byte_offset << std::endl;
-    std::cout << "numero_de_bloques: "<< numero_de_bloques << std::endl;
-    std::cout << "numero_de_sets: "<< numero_de_sets << std::endl;
-    std::cout << "index: "<< index << std::endl;
+    tamano_tag = 32 - log2(1024*tamano_cache/asociatividad);
+	fin_index = 32 - byte_offset;
+    cout << "byte_offset: "<< byte_offset << endl;
+    cout << "numero_de_bloques: "<< numero_de_bloques << endl;
+    cout << "numero_de_sets: "<< numero_de_sets << endl;
+    cout << "index: "<< index << endl;
+	cout << "tag: "<< tag << endl;
 }
 
 //crea una matriz con el tamaño correspondiente a la cantidad de sets y la asociatividad
 void Cache::createCache(){
-    cache = new int *[numero_de_sets];
-    for(int i = 0; i < numero_de_sets; i++){
+    cache = new int *[index];
+    for(int i = 0; i < index; i++){
         cache[i] = new int[asociatividad];
     }
-    for(int i = 0; i < numero_de_sets; i++){
+    for(int i = 0; i < index; i++){
         for(int j = 0; j < asociatividad; j++){
             cache[i][j] = 0;
         }
@@ -67,37 +72,81 @@ void Cache::createCache(){
 //se encarga de poner en cero todos los bloques del cache para "limpiarla"
 void Cache::limpiarCache() {
     //inicializa la matriz en ceros
-    for(int i = 0; i < numero_de_sets; i++){
+    for(int i = 0; i < index; i++){
         for(int j = 0; j < asociatividad; j++){
-            std::cout << cache[i][j];
+            cout << cache[i][j];
         }
-        std::cout << " " << std::endl;
+        cout << " " << endl;
     }
 }
 
-void Cache::calcularTag(){
-    //aqui debería de ir el método que calcula los tags tanto del bloque presente en cache como del que se estra trayendo
-    //pero no se como hacerlo
-	//Esto debería recibir como parámetro la direccion
-    int corrimiento = index + byte_offset;
-    for (int i = 0; i < corrimiento; i++) {
-        /* code */
-    }
+void Cache::calcularTag_Index(string address){
+		address = Hex_String_to_Bin_String(address);//Se convierte a de Hex a binario, pero siempre string
+		string tag_bin = adress.substr(0,tamano_tag);
+		string index_bin = address.substr(tamano_tag,fin_index);
+		
+		tag = stoi(tag_bin, nullptr, 2);//Se convierte de string a int
+		index = stoi(index_bin, nullptr, 2);//Se convierte de string a int
 }
 
+//Se encarga de convertir un string de hexadecimales a un string de binarios
+string Cache::Hex_String_to_Bin_String (string sHex)
+		{
+			string sReturn = "";
+			for (int i = 0; i < sHex.length (); ++i)
+			{
+				switch (sHex [i])
+				{
+					case '0': sReturn.append ("0000"); break;
+					case '1': sReturn.append ("0001"); break;
+					case '2': sReturn.append ("0010"); break;
+					case '3': sReturn.append ("0011"); break;
+					case '4': sReturn.append ("0100"); break;
+					case '5': sReturn.append ("0101"); break;
+					case '6': sReturn.append ("0110"); break;
+					case '7': sReturn.append ("0111"); break;
+					case '8': sReturn.append ("1000"); break;
+					case '9': sReturn.append ("1001"); break;
+					case 'a': sReturn.append ("1010"); break;
+					case 'b': sReturn.append ("1011"); break;
+					case 'c': sReturn.append ("1100"); break;
+					case 'd': sReturn.append ("1101"); break;
+					case 'e': sReturn.append ("1110"); break;
+					case 'f': sReturn.append ("1111"); break;
+				}
+			}
+			return sReturn;
+		}
+
+//Simulacion		
 void Cache::simulacion(){
-	//aquí debe ir código que se encargue de extraer linea por linea las direcciones del archivo
-    /* código */ //la dirección debe ir guardada en la variable entera llamada "dirección" en forma de arreglo
-    //luego se debe llamar al método "calcularTag(direccion)" enciando como parámetro "direccion"
+	
 	string address,b;
 	
 	ifstream memoria("aligned1000.trace");	//Leer el archivo en el objeto memoria
 	
 	//Recorrer la memoria
 	while(memoria >> address >> b){
-		int direccion = atoi(address.c_str());	//Se convierte de string a int para ser enviado
-		calcularTag(direccion);
 		
+		int lugar=0;
+		calcularTag_Index(address);
+		
+		//Recorrer el set
+		for(int i=0; i<asociatividad; i++){
+			if(cache[i][index]==tag){
+				hits = hits + 1;
+				i=asociatividad //cuando hay hit se sale del for
+			}
+			
+			else if(i==asociatividad-1){//Si hay miss
+				misses = misses + 1;
+				lugar = random(asociatividad); //Se elige un lugar aleatorio para guardar
+				cache[lugar][index] = tag; //Se guarda el tag en el cache
+			}			
+		}			
 	}
 	
+	printf("hits= %d , misses= %d \n\n", hits, misses);
+
+	printf("miss rate= %d \n\n", (misses*100)/(hits+misses));
 }
