@@ -20,5 +20,6 @@ int main(int argc, char const *argv[]) {
     miCache.setCache();
     miCache.createCache();
     miCache.limpiarCache();
+	miCache.simulacion();
     return 0;
 }

@@ -78,6 +78,7 @@ void Cache::limpiarCache() {
 void Cache::calcularTag(){
     //aqui debería de ir el método que calcula los tags tanto del bloque presente en cache como del que se estra trayendo
     //pero no se como hacerlo
+	//Esto debería recibir como parámetro la direccion
     int corrimiento = index + byte_offset;
     for (int i = 0; i < corrimiento; i++) {
         /* code */
@@ -85,8 +86,18 @@ void Cache::calcularTag(){
 }
 
 void Cache::simulacion(){
-    //aquí debe ir código que se encargue de extraer linea por linea las direcciones del archivo
+	//aquí debe ir código que se encargue de extraer linea por linea las direcciones del archivo
     /* código */ //la dirección debe ir guardada en la variable entera llamada "dirección" en forma de arreglo
     //luego se debe llamar al método "calcularTag(direccion)" enciando como parámetro "direccion"
-
+	string address,b;
+	
+	ifstream memoria("aligned1000.trace");	//Leer el archivo en el objeto memoria
+	
+	//Recorrer la memoria
+	while(memoria >> address >> b){
+		int direccion = atoi(address.c_str());	//Se convierte de string a int para ser enviado
+		calcularTag(direccion);
+		
+	}
+	
 }
