@@ -1,0 +1,62 @@
+printf "Asociatividad 1 \n \n";
+./mi_cache.o 1 16 4
+./mi_cache.o 1 16 16
+./mi_cache.o 1 16 64
+./mi_cache.o 1 16 128
+
+./mi_cache.o 1 64 4
+./mi_cache.o 1 64 16
+./mi_cache.o 1 64 64
+./mi_cache.o 1 64 128
+
+./mi_cache.o 1 128 4
+./mi_cache.o 1 128 16
+./mi_cache.o 1 128 64
+./mi_cache.o 1 128 128
+
+./mi_cache.o 1 512 4
+./mi_cache.o 1 512 16
+./mi_cache.o 1 512 64
+./mi_cache.o 1 512 128
+
+printf "Asociatividad 2 \n \n";
+./mi_cache.o 2 16 4
+./mi_cache.o 2 16 16
+./mi_cache.o 2 16 64
+./mi_cache.o 2 16 128
+
+./mi_cache.o 2 64 4
+./mi_cache.o 2 64 16
+./mi_cache.o 2 64 64
+./mi_cache.o 2 64 128
+
+./mi_cache.o 2 128 4
+./mi_cache.o 2 128 16
+./mi_cache.o 2 128 64
+./mi_cache.o 2 128 128
+
+./mi_cache.o 2 512 4
+./mi_cache.o 2 512 16
+./mi_cache.o 2 512 64
+./mi_cache.o 2 512 128
+
+printf "Asociatividad 4 \n \n";
+./mi_cache.o 4 16 4
+./mi_cache.o 4 16 16
+./mi_cache.o 4 16 64
+./mi_cache.o 4 16 128
+
+./mi_cache.o 4 64 4
+./mi_cache.o 4 64 16
+./mi_cache.o 4 64 64
+./mi_cache.o 4 64 128
+
+./mi_cache.o 4 128 4
+./mi_cache.o 4 128 16
+./mi_cache.o 4 128 64
+./mi_cache.o 4 128 128
+
+./mi_cache.o 4 512 4
+./mi_cache.o 4 512 16
+./mi_cache.o 4 512 64
+./mi_cache.o 4 512 128
