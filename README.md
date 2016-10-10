@@ -1,6 +1,6 @@
 ## Memoria Cache
 
-Este proyecto consiste en una simulación de una memoria cache con el fin de obtener su miss rate al variar los parámetros: asociatividad, tamaño del caché y tamaño del bloque.
+Este proyecto consiste en una simulación de una memoria cache con política de reemplazo aleatoria con el fin de obtener su miss rate al variar los parámetros: asociatividad, tamaño del caché y tamaño del bloque.
 
 ## Compilación
 
